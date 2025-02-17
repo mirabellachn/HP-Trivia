@@ -30,80 +30,115 @@ struct ContentView: View {
                 
                 VStack {
                     VStack {
-                        Image(systemName: "bolt.fill")
-                            .font(.largeTitle)
-                            .imageScale(.large)
-                        
-                        Text("HP")
-                            .font(.custom(Constants.hpFont, size: 70))
-                            .padding(.bottom, -50)
-                        
-                        Text("Trivia")
-                            .font(.custom(Constants.hpFont, size: 60))
+                        if animateViewsIn {
+                            VStack {
+                                Image(systemName: "bolt.fill")
+                                    .font(.largeTitle)
+                                    .imageScale(.large)
+                                
+                                Text("HP")
+                                    .font(.custom(Constants.hpFont, size: 70))
+                                    .padding(.bottom, -50)
+                                
+                                Text("Trivia")
+                                    .font(.custom(Constants.hpFont, size: 60))
+                            }
+                            .padding(.top, 70)
+                            .transition(.move(edge: .top))
+                        }
                     }
-                    .padding(.top, 70)
-                    .transition(.move(edge: .top))
+                    .animation(.easeOut(duration: 0.7).delay(2), value: animateViewsIn)
                     
                     Spacer()
                     
                     VStack {
-                        Text("Recent Scores")
-                            .font(.title2)
-                        
-                        Text("33")
-                        Text("27")
-                        Text("15")
+                        if animateViewsIn {
+                            VStack {
+                                Text("Recent Scores")
+                                    .font(.title2)
+                                
+                                Text("33")
+                                Text("27")
+                                Text("15")
+                            }
+                            .font(.title3)
+                            .padding(.horizontal)
+                            .foregroundColor(.white)
+                            .background(.black.opacity(0.7))
+                            .cornerRadius(15)
+                            .transition(.opacity)
+                        }
                     }
-                    .font(.title3)
-                    .padding(.horizontal)
-                    .foregroundColor(.white)
-                    .background(.black.opacity(0.7))
-                    .cornerRadius(15)
+                    .animation(.linear(duration: 1).delay(4), value: animateViewsIn)
                     
                     Spacer()
                     
                     HStack {
                         Spacer()
-                        Button {
-                            // Show instructions screen
-                        } label: {
-                            Image(systemName: "info.circle.fill")
-                                .font(.largeTitle)
-                                .foregroundColor(.white)
-                                .shadow(radius: 5)
-                        }
-                        .scaleEffect(scalePlayButton ? 1.2 : 1)
-                        .onAppear {
-                            withAnimation(.easeInOut(duration: 1.3).repeatForever()) {
-                                scalePlayButton.toggle()
+                        
+                        VStack {
+                            if animateViewsIn {
+                                Button {
+                                    // Show instructions screen
+                                } label: {
+                                    Image(systemName: "info.circle.fill")
+                                        .font(.largeTitle)
+                                        .foregroundColor(.white)
+                                        .shadow(radius: 5)
+                                }
+                                .transition(.offset(x: -geo.size.width/4))
                             }
                         }
+                        .animation(.easeOut(duration: 0.7).delay(2.7), value: animateViewsIn)
                         
                         Spacer()
                         
-                        Button{
-                            // Start a new game
-                        } label: {
-                            Text("Play")
-                                .font(.largeTitle)
-                                .foregroundStyle(.white)
-                                .padding(.vertical, 7)
-                                .padding(.horizontal, 50)
-                                .background(.brown)
-                                .cornerRadius(7)
-                                .shadow(radius: 5)
+                        VStack {
+                            if animateViewsIn {
+                                Button{
+                                    // Start a new game
+                                } label: {
+                                    Text("Play")
+                                        .font(.largeTitle)
+                                        .foregroundStyle(.white)
+                                        .padding(.vertical, 7)
+                                        .padding(.horizontal, 50)
+                                        .background(.brown)
+                                        .cornerRadius(7)
+                                        .shadow(radius: 5)
+                                }
+                                .scaleEffect(scalePlayButton ? 1.2 : 1)
+                                .onAppear {
+                                    withAnimation(.easeInOut(duration: 1.3).repeatForever()) {
+                                        scalePlayButton.toggle()
+                                    }
+                                }
+                                
+                                .transition(.offset(y: geo.size.height/3))
+                            }
                         }
+                        .animation(.easeOut(duration: 0.7).delay(2), value: animateViewsIn)
+                        
+                        
                         Spacer()
                         
-                        Button {
-                            
-                        } label: {
-                            Image(systemName: "gearshape.fill")
-                                .font(.largeTitle)
-                                .foregroundColor(.white)
-                                .shadow(radius: 5)
-                            
+                        VStack {
+                            if animateViewsIn {
+                                Button {
+                                    
+                                } label: {
+                                    Image(systemName: "gearshape.fill")
+                                        .font(.largeTitle)
+                                        .foregroundColor(.white)
+                                        .shadow(radius: 5)
+                                    
+                                }
+                                
+                                .transition(.offset(x: -geo.size.width/4))
+                            }
                         }
+                        .animation(.easeOut(duration: 0.7).delay(2), value: animateViewsIn)
+                        
                         Spacer()
                     }
                     .frame(width: geo.size.width)
@@ -115,7 +150,8 @@ struct ContentView: View {
         }
         .ignoresSafeArea()
         .onAppear {
-//            playAudio()
+            animateViewsIn = true
+            //            playAudio()
         }
     }
     private func playAudio() {
@@ -128,6 +164,8 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        VStack {
+            ContentView()
+        }
     }
 }
