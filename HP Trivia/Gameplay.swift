@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct Gameplay: View {
+    @Environment(\.dismiss) private var dismiss
     @State private var animateViewsIn = false
     @State private var tappedCorrectAnswer = false
     @State private var hintWiggle = false
     @State private var scaleNextButton = false
     @State private var movePointsToScore = false
+    @State private var revealHint = false
+    @State private var revealBook = false
     
     var body: some View {
         GeometryReader { geo in
@@ -26,7 +29,7 @@ struct Gameplay: View {
                     // MARK: Controls
                     HStack {
                         Button("End Game") {
-                            // TODO: end game
+                            dismiss()
                             
                         }
                         .buttonStyle(.borderedProminent)
@@ -72,6 +75,24 @@ struct Gameplay: View {
                                             hintWiggle = true
                                         }
                                     }
+                                    .onTapGesture {
+                                        withAnimation(.easeOut(duration: 1)) {
+                                            revealHint = true
+                                        }
+                                    }
+                                    .rotation3DEffect(.degrees(revealHint ? 1440 : 0), axis: (x: 0, y: 1, z: 0))
+                                        .scaleEffect(revealHint ? 5 : 1)
+                                        .opacity(revealHint ? 0 : 1)
+                                        .offset(x: revealHint ? geo.size.width/2 : 0)
+                                        .overlay(
+                                            Text("The Boy Who _____")
+                                                .padding(.leading, 33)
+                                                .minimumScaleFactor(0.5)
+                                                .multilineTextAlignment(.center)
+                                                .opacity(revealHint ? 1 : 0)
+                                                .scaleEffect(revealHint ? 1.33 : 1)
+                                            
+                                        )
                             }
                         }
                         .animation(.easeOut(duration: 1.5).delay(2), value: animateViewsIn)
@@ -95,8 +116,27 @@ struct Gameplay: View {
                                             hintWiggle = true
                                         }
                                     }
+                                
+                                    .onTapGesture {
+                                        withAnimation(.easeOut(duration: 1)) {
+                                            revealBook = true
+                                        }
+                                    }
+                                    .rotation3DEffect(.degrees(revealBook ? 1440 : 0), axis: (x: 0, y: 1, z: 0))
+                                    .scaleEffect(revealBook ? 5 : 1)
+                                    .opacity(revealBook ? 0 : 1)
+                                    .offset(x: revealBook ? geo.size.width/2 : 0)
+                                    .overlay(
+                                        Image("hp1")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .padding(.trailing, 33)
+                                            .opacity(revealBook ? 1 : 0)
+                                            .scaleEffect(revealBook ? 1.33 : 1)
+                                        
+                                    )
                             }
-                        }
+                    }
                         .animation(.easeOut(duration: 1.5).delay(2), value: animateViewsIn)
                     }
                     .padding(.bottom)
@@ -206,8 +246,8 @@ struct Gameplay: View {
         }
         .ignoresSafeArea()
         .onAppear() {
-//            animateViewsIn = true
-            tappedCorrectAnswer = true
+            animateViewsIn = true
+//            tappedCorrectAnswer = true
         }
     }
 }
