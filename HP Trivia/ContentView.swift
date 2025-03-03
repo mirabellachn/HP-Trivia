@@ -9,6 +9,7 @@ import SwiftUI
 import AVKit
 
 struct ContentView: View {
+    @EnvironmentObject private var store: Store
     @State private var audioPlayer: AVAudioPlayer!
     @State private var scalePlayButton = false
     @State private var moveBackgroundImage = false
@@ -146,6 +147,7 @@ struct ContentView: View {
                                 .transition(.offset(x: -geo.size.width/4))
                                 .sheet(isPresented: $showSettings) {
                                     Settings()
+                                        .environmentObject(Store())
                                 }
                             }
                         }
@@ -178,6 +180,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             ContentView()
+                .environmentObject(Store())
         }
     }
 }
