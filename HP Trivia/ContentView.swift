@@ -147,7 +147,7 @@ struct ContentView: View {
                                 .transition(.offset(x: -geo.size.width/4))
                                 .sheet(isPresented: $showSettings) {
                                     Settings()
-                                        .environmentObject(Store())
+                                        .environmentObject(store)
                                 }
                             }
                         }

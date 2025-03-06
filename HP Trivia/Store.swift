@@ -30,11 +30,20 @@ class Store: ObservableObject {
     
     func loadProducts() async {
         do {
-            products = try await Product.products(for: productIDs)
+            let fetchedProducts = try await Product.products(for: productIDs)
+            
+            // Sort fetched products based on the order of productIDs
+            products = fetchedProducts.sorted {
+                guard let firstIndex = productIDs.firstIndex(of: $0.id),
+                      let secondIndex = productIDs.firstIndex(of: $1.id) else { return false }
+                return firstIndex < secondIndex
+            }
+            print(products)
         } catch {
             print("Couldn't fetch those products: \(error)")
         }
     }
+    
     func purchase(_ product: Product) async {
         do {
             let result = try await product.purchase()
@@ -66,7 +75,7 @@ class Store: ObservableObject {
         }
     }
     
-    private func checkPurchased() async {
+    func checkPurchased() async {
         for product in products {
             guard let state = await product.currentEntitlement else { return }
             
