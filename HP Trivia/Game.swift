@@ -112,6 +112,7 @@ class Game: ObservableObject {
                 print(allQuestions)
             } catch {
                 print("Error decoding JSON data: \(error)")
+                print("Test print")
             }
         }
     }
